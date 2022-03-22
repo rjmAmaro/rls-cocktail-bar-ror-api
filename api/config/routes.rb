@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace 'api' do
     resources :categories do 
-      resources :cocktails
+      resources :cocktails do
+        resources :ingredients
+      end
     end
   end
 end

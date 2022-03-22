@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_145056) do
 
   create_table "cocktails", force: :cascade do |t|
     t.string "name", null: false
-    t.string "photo", null: false
+    t.string "photo"
     t.integer "category_id", null: false
     t.string "desc", null: false
     t.datetime "created_at", null: false

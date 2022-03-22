@@ -41,6 +41,7 @@ while current_letter <= last_letter
 
       new_cocktail.category = category
 
+      #puts "TOU VIVO"
       current_ingredient = cocktail["strIngredient1"]
       n_ingredient = 1
       while current_ingredient
@@ -54,7 +55,7 @@ while current_letter <= last_letter
         raw_ingredient = JSON.parse(ingredients.body)["ingredients"][0]
 
         #raw_ingredient = ingredients.find(strIngredient: current_ingredient)
-        #
+
         ingredient = Ingredient.find_by(name: raw_ingredient["strIngredient"])
 
         if ingredient.nil?

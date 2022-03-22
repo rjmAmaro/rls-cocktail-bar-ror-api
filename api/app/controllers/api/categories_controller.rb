@@ -13,6 +13,12 @@ module Api
     end
 
     def show
+      category = Category.find_by(id: params[:id])
+      if category.nil?
+        render json: {category: nil}
+      else
+        render json: {name: category.name}
+      end
     end
   end
 end
