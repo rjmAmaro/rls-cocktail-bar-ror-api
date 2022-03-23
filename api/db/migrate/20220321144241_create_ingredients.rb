@@ -1,9 +1,9 @@
 class CreateIngredients < ActiveRecord::Migration[7.0]
   def change
     create_table :ingredients do |t|
-      t.string :name, null: false
-      t.string :desc, null: false
-      t.string :photo, null: true
+      t.string :strIngredient, null: false
+      t.string :strDescription, null: false
+      t.string :strImageSource, null: true
 
       t.timestamps
     end

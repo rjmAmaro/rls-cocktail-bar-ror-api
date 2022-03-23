@@ -8,16 +8,16 @@ module Api
       
       #JSON.parse(categories.body)
 
-      categories = Category.order('name')
-      render json: {name: categories}
+      categories = Category.order('strCategory')
+      render json: categories, only: [:id, :strCategory]
     end
 
     def show
       category = Category.find_by(id: params[:id])
       if category.nil?
-        render json: {category: nil}
+        render json: {strCategory: nil}
       else
-        render json: {name: category.name}
+        render json: category, only: [:id, :strCategory]
       end
     end
   end
