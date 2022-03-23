@@ -6,16 +6,26 @@ module Api
         ingredients = Ingredient.all? { |ingridient| ingridient.contains?(params["name"]) }
       end
 =end
-      cocktail = Cocktail.find_by(id: params[:cocktail_id])
-      render json: {ingredients: cocktail.ingredients}
+      if params.has_key?("cocktail_id")
+        cocktail = Cocktail.find_by(id: params[:cocktail_id])
+        render json: cocktail.ingredients, only: [:id, :strIngredient, :strDescription, :strImageSource]
+      else
+        ingredients = Ingredient.order('strIngredient')
+        render json: ingredients, only: [:id, :strIngredient, :strDescription, :strImageSource]
+      end
     end
 
-    def list_all
-      ingredients = Ingredient.order('name')
-      render json: {ingredients: ingredients}
+    def search
+      if params.has_key?("content")
+        results = Ingredient.where("strIngredient like %?%", "#{params["content"]}")
+        render json: {ingredients: results}
+      else
+        render json: {ingredients: nil}
+      end
     end
 
     def show
+=begin
       cocktail = Cocktail.find_by(id: params[:cocktail_id])
       count = cocktail.ingredients.count
       i=1
@@ -32,18 +42,18 @@ module Api
       if final_ingredient.nil?
         render json: {ingredient: nil}
       else
-        #render json: {name: ingredient.name, desc: ingredient.desc, photo: ingredient.photo}
+        #render json: {name: ingredient.name, decription: ingredient.decription, photo: ingredient.photo}
         render json: {ingredient: final_ingredient}
       end
+=end
 
-=begin
+
       ingredient = Ingredient.find_by(id: params[:id])
       if ingredient.nil?
         render json: {ingredient: nil}
       else
-        render json: {name: ingredient.name, desc: ingredient.desc, photo: ingredient.photo}
+        render json: {strIngredient: ingredient.strIngredient, strDescription: ingredient.strDescription, strImageSource: ingredient.strImageSource}
       end
-=end
     end
   end
 end

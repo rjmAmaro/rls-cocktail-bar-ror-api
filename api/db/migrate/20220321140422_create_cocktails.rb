@@ -1,10 +1,10 @@
 class CreateCocktails < ActiveRecord::Migration[7.0]
   def change
     create_table :cocktails do |t|
-      t.string :name, null: false
-      t.string :photo, null: true
+      t.string :strDrink, null: false
+      t.string :strDrinkThumb, null: true
       t.references :category, null: false, foreign_key: true
-      t.string :desc, null: false
+      t.string :strInstructions, null: false
 
       t.timestamps
     end

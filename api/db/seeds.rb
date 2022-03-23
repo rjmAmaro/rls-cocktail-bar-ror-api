@@ -29,13 +29,13 @@ while current_letter <= last_letter
   if cocktails
     cocktails.each do |cocktail|
       new_cocktail = Cocktail.new
-      new_cocktail.name = cocktail["strDrink"]
-      new_cocktail.photo = cocktail["strDrinkThumb"]
-      new_cocktail.desc = cocktail["strInstructions"]
+      new_cocktail.strDrink = cocktail["strDrink"]
+      new_cocktail.strDrinkThumb = cocktail["strDrinkThumb"]
+      new_cocktail.strInstructions = cocktail["strInstructions"]
 
-      category = Category.find_by(name: cocktail["strCategory"])
+      category = Category.find_by(strCategory: cocktail["strCategory"])
       unless category
-        category = Category.create(name: cocktail["strCategory"])
+        category = Category.create(strCategory: cocktail["strCategory"])
         category.save
       end
 
@@ -56,10 +56,10 @@ while current_letter <= last_letter
 
         #raw_ingredient = ingredients.find(strIngredient: current_ingredient)
 
-        ingredient = Ingredient.find_by(name: raw_ingredient["strIngredient"])
+        ingredient = Ingredient.find_by(strIngredient: raw_ingredient["strIngredient"])
 
         if ingredient.nil?
-          ingredient = Ingredient.create(name: raw_ingredient["strIngredient"], desc: raw_ingredient["strDescription"])
+          ingredient = Ingredient.create(strIngredient: raw_ingredient["strIngredient"], strDescription: raw_ingredient["strDescription"])
           ingredient.save
         end
 

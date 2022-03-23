@@ -4,17 +4,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   namespace 'api' do
-    resources :categories do
-      resources :cocktails do
-        collection do
-
-        end
-        resources :ingredients
-      end
-    end
+    resources :categories
+    resources :cocktails
+    resources :ingredients
 
     #Routes that are not dependent on other Models Ids
-    get '/cocktails/all', to: 'cocktails#list_all'
-    get '/ingredients/all', to: 'ingredients#list_all'
+    get '/categories/*category_id/cocktails', to: 'cocktails#index'
+    get '/cocktails/*cocktail_id/ingredients', to: 'ingredients#index'
+    get '/ingredients/search/*content', to: 'ingredients#search'
+    get '/cocktails/search/*content', to: 'cocktails#search'
   end
 end
