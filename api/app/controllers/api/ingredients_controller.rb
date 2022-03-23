@@ -6,15 +6,23 @@ module Api
         ingredients = Ingredient.all? { |ingridient| ingridient.contains?(params["name"]) }
       end
 =end
-      if params.has_key?("cocktail_id")
+      if params.has_key?("cocktail_id") && params.has_key?("content")
+        cocktail = Cocktail.find_by(id: params[:cocktail_id])
+        results = cocktail.ingredients.where("strIngredient like ?", "%#{params["content"]}%")
+        render json: results, only: [:id, :strIngredient, :strDescription, :strImageSource]
+      elsif params.has_key?("cocktail_id")
         cocktail = Cocktail.find_by(id: params[:cocktail_id])
         render json: cocktail.ingredients, only: [:id, :strIngredient, :strDescription, :strImageSource]
+      elsif params.has_key?("content")
+        results = Ingredient.where("strIngredient like ?", "%#{params["content"]}%")
+        render json: results, only: [:id, :strIngredient, :strDescription, :strImageSource]
       else
         ingredients = Ingredient.order('strIngredient')
         render json: ingredients, only: [:id, :strIngredient, :strDescription, :strImageSource]
       end
     end
 
+=begin
     def search
       if params.has_key?("content")
         results = Ingredient.where("strIngredient like %?%", "#{params["content"]}")
@@ -23,6 +31,7 @@ module Api
         render json: {ingredients: nil}
       end
     end
+=end
 
     def show
 =begin
