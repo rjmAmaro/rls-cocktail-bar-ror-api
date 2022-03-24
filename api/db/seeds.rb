@@ -45,10 +45,13 @@ while current_letter <= last_letter
       current_ingredient = cocktail["strIngredient1"]
       n_ingredient = 1
       while current_ingredient
+        image_link=nil
         if current_ingredient == "J\u00E4germeister"
           ingredients = RestClient.get("www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=278")
+          image_link="www.thecocktaildb.com/images/ingredients/jagermeister.png"
         elsif current_ingredient == "A\u00F1ejo rum"
           ingredients = RestClient.get("www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=37")
+          image_link="www.thecocktaildb.com/images/ingredients/anejo rum.png"
         else
           ingredients = RestClient.get("www.thecocktaildb.com/api/json/v1/1/search.php?i=#{current_ingredient}")
         end
@@ -57,13 +60,29 @@ while current_letter <= last_letter
         #raw_ingredient = ingredients.find(strIngredient: current_ingredient)
 
         ingredient = Ingredient.find_by(strIngredient: raw_ingredient["strIngredient"])
+        puts ingredient
+        p ingredient
+        flag = "ENCONTROU"
 
         if ingredient.nil?
-          ingredient = Ingredient.create(strIngredient: raw_ingredient["strIngredient"], strDescription: raw_ingredient["strDescription"])
+          if image_link.nil?
+            image_link="www.thecocktaildb.com/images/ingredients/#{raw_ingredient["strIngredient"].downcase.gsub(" ","%20")}.png"
+          end
+          puts "new #{image_link}"
+          ingredient = Ingredient.new
+          ingredient.strIngredient =  raw_ingredient["strIngredient"]
+          ingredient.strDescription = raw_ingredient["strDescription"]
+          ingredient.strImageSource = image_link
           ingredient.save
+          flag = "CRIOU"
         end
 
         new_cocktail.ingredients.push(ingredient)
+
+        puts n_ingredient
+        puts current_ingredient
+        puts flag
+        puts "\n\n"
 
         n_ingredient+=1
         current_ingredient = cocktail["strIngredient#{n_ingredient}"]

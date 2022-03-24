@@ -54,4 +54,26 @@ describe 'API', type: :request do
 
     DatabaseCleaner.clean
   end
+
+  it 'returns ingredients from a cocktail' do
+    DatabaseCleaner.clean
+
+    category = Category.create(strCategory: "Juice")
+    cocktail = Cocktail.new(strDrink: "Orange Juice", category: category, strInstructions: "Put the juice")
+    ingridient1 = Ingredient.create(strIngredient: "Orange", strDescription: "Its a Fruit!")
+    ingridient2 = Ingredient.create(strIngredient: "Water", strDescription: "h2o")
+    ingridient2 = Ingredient.create(strIngredient: "Sugar", strDescription: "Po para as formigas")
+
+    cocktail.ingredients.push(ingridient1)
+    cocktail.ingredients.push(ingridient2)
+    cocktail.save
+
+    get '/api/ingredients?content=o'
+
+    expect(response).to have_http_status(:success)
+    json = JSON.parse(response.body)
+    expect(json).to eq([{"id"=>1, "strIngredient"=>"Orange", "strDescription"=>"Its a Fruit!", "strImageSource"=>nil}])
+
+    DatabaseCleaner.clean
+  end
 end
