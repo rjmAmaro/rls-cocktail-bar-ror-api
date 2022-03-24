@@ -69,4 +69,37 @@ describe 'API', type: :request do
 
     DatabaseCleaner.clean
   end
+
+  it "creates a cocktail" do
+    DatabaseCleaner.clean
+
+    category = Category.create(strCategory: "Juice")
+
+    params = {
+      cocktail: {
+        strDrink: "Ginjinha",
+        strDrinkThumb: "teste_ginjinha",
+        category_id: 1,
+        strInstructions: "Bebe e cala",
+        ingredients: [{strIngredient: "Agua tuga"}]
+      }
+    }
+
+    puts params
+
+    first_count = Cocktail.count
+    post '/api/cocktails', params: params
+    last_count = Cocktail.count
+    expect(response).to have_http_status(:created)
+    expect(last_count-first_count).to eq(1)
+    expect(response.body).to eq({
+                         "id": 1,
+                         "strDrink": "Ginjinha",
+                         "strDrinkThumb": "teste_ginjinha",
+                         "category_id": 1,
+                         "strInstructions": "Bebe e cala"
+                       }.to_json)
+
+    DatabaseCleaner.clean
+  end
 end

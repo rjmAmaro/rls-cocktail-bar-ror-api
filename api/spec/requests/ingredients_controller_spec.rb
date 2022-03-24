@@ -76,4 +76,26 @@ describe 'API', type: :request do
 
     DatabaseCleaner.clean
   end
+
+  it "creates an ingredient" do
+    DatabaseCleaner.clean
+
+    params = {
+      ingredient: {
+        strIngredient: "Laranja",
+        strDescription: "descricao",
+        strImageSource: "teste_laranja"
+      }
+    }
+
+    first_count = Ingredient.count
+    post '/api/ingredients', params: params
+    last_count = Ingredient.count
+
+    expect(response).to have_http_status(:created)
+    expect(last_count-first_count).to eq(1)
+    expect(response.body).to eq({id: 1, strIngredient: "Laranja", strDescription: "descricao", strImageSource: "teste_laranja"}.to_json)
+
+    DatabaseCleaner.clean
+  end
 end

@@ -4,10 +4,6 @@ require 'json'
 module Api
   class CategoriesController < ApplicationController
     def index
-      #categories = RestClient.get('www.thecocktaildb.com/api/json/v1/1/filter.php?c=Ordinary_Drink')
-      
-      #JSON.parse(categories.body)
-
       categories = Category.order('strCategory')
       render json: categories, only: [:id, :strCategory]
     end
@@ -19,6 +15,20 @@ module Api
       else
         render json: category, only: [:id, :strCategory]
       end
+    end
+
+    def create
+      category = Category.new(category_params)
+      if(category.save)
+        render json: category, only: [:id, :strCategory], status: :created
+      else
+        render error: { error: 'Unable to create Category'}, status: 400
+      end
+    end
+
+    private
+    def category_params
+      params.require(:category).permit("strCategory")
     end
   end
 end

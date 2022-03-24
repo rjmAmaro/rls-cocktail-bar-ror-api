@@ -1,11 +1,6 @@
 module Api
   class IngredientsController < ApplicationController
     def index
-=begin
-      if params.has_key?(:name)
-        ingredients = Ingredient.all? { |ingridient| ingridient.contains?(params["name"]) }
-      end
-=end
       if params.has_key?("cocktail_id") && params.has_key?("content")
         cocktail = Cocktail.find_by(id: params[:cocktail_id])
         results = cocktail.ingredients.where("strIngredient like ?", "%#{params["content"]}%")
@@ -22,47 +17,27 @@ module Api
       end
     end
 
-=begin
-    def search
-      if params.has_key?("content")
-        results = Ingredient.where("strIngredient like %?%", "#{params["content"]}")
-        render json: {ingredients: results}
-      else
-        render json: {ingredients: nil}
-      end
-    end
-=end
-
     def show
-=begin
-      cocktail = Cocktail.find_by(id: params[:cocktail_id])
-      count = cocktail.ingredients.count
-      i=1
-      final_ingredient = nil
-      cocktail.ingredients.each do |ingredient|
-        if i==params[:id].to_i
-          final_ingredient = ingredient
-          break
-        elsif i>count
-          break
-        end
-        i+=1
-      end
-      if final_ingredient.nil?
-        render json: {ingredient: nil}
-      else
-        #render json: {name: ingredient.name, decription: ingredient.decription, photo: ingredient.photo}
-        render json: {ingredient: final_ingredient}
-      end
-=end
-
-
       ingredient = Ingredient.find_by(id: params[:id])
       if ingredient.nil?
         render json: {ingredient: nil}
       else
         render json: {strIngredient: ingredient.strIngredient, strDescription: ingredient.strDescription, strImageSource: ingredient.strImageSource}
       end
+    end
+
+    def create
+      ingredient = Ingredient.new(ingredient_params)
+      if(ingredient.save)
+        render json: ingredient, only: [:id, :strIngredient, :strDescription, :strImageSource], status: :created
+      else
+        render error: { error: 'Unable to create Ingredient'}, status: 400
+      end
+    end
+
+    private
+    def ingredient_params
+      params.require(:ingredient).permit("strIngredient","strDescription","strImageSource")
     end
   end
 end

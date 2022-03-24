@@ -3,7 +3,7 @@ require 'database_cleaner/active_record'
 
 DatabaseCleaner.strategy = :truncation
 
-describe 'API', type: :request do
+describe 'Categories API', type: :request do
 
   it 'returns all categories' do
     DatabaseCleaner.clean
@@ -13,13 +13,12 @@ describe 'API', type: :request do
     get '/api/categories'
 
     expect(response).to have_http_status(:success)
-    json = JSON.parse(response.body)
-    expect(json).to eq([{"id"=>1, "strCategory"=>"Juice"}])
+    expect(response.body).to eq([{id: 1, strCategory: "Juice"}].to_json)
 
     DatabaseCleaner.clean
   end
 
-  it 'returns a category' do
+  it 'returns the correct category' do
     DatabaseCleaner.clean
 
     Category.create(strCategory: "Juice")
@@ -32,4 +31,24 @@ describe 'API', type: :request do
 
     DatabaseCleaner.clean
   end
+
+  it "creates a category" do
+    DatabaseCleaner.clean
+
+    params = {category: {
+      strCategory: "Juices"
+      }
+    }
+
+    first_count = Category.count
+    post '/api/categories', params: params
+    last_count = Category.count
+
+    expect(response).to have_http_status(:created)
+    expect(last_count-first_count).to eq(1)
+    expect(response.body).to eq({id: 1, strCategory: "Juices"}.to_json)
+
+    DatabaseCleaner.clean
+  end
+
 end
