@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_145056) do
     t.string "strDrink", null: false
     t.string "strDrinkThumb"
     t.integer "category_id", null: false
-    t.string "strInstructions", null: false
+    t.string "strInstructions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_cocktails_on_category_id"
@@ -34,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_145056) do
 
   create_table "ingredients", force: :cascade do |t|
     t.string "strIngredient", null: false
-    t.string "strDescription", null: false
+    t.string "strDescription"
     t.string "strImageSource"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

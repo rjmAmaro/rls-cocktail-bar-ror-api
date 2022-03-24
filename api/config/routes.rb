@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     #Routes that are not dependent on other Models Ids
     get '/categories/*category_id/cocktails', to: 'cocktails#index'
     get '/cocktails/*cocktail_id/ingredients', to: 'ingredients#index'
-    get '/ingredients/search/*content', to: 'ingredients#search'
-    get '/cocktails/search/*content', to: 'cocktails#search'
+    #get '/ingredients/search/*content', to: 'ingredients#search'
+    #get '/cocktails/search/*content', to: 'cocktails#search'
   end
 end

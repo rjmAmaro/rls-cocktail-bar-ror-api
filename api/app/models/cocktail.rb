@@ -4,5 +4,4 @@ class Cocktail < ApplicationRecord
 
   validates :strDrink, presence: true, uniqueness: true
   validates :category, presence: true
-  validates :strInstructions, presence: true
 end
