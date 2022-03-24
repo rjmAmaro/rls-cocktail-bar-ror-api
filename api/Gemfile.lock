@@ -69,6 +69,7 @@ GEM
     bootsnap (1.11.1)
       msgpack (~> 1.2)
     builder (3.2.4)
+    byebug (11.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     database_cleaner-active_record (2.0.1)
@@ -202,6 +203,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
+  byebug
   database_cleaner-active_record
   debug
   puma (~> 5.0)
