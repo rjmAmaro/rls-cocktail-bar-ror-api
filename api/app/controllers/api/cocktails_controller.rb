@@ -20,15 +20,13 @@ module Api
     end
 
     def show
-      cocktail = Cocktail.find_by(id: params[:id])
+      cocktail = Cocktail.find(params[:id])
       if cocktail.nil?
-        render json: {drinks: nil}
+        render error: { error: 'Cocktail does not exist'}, status: 400
       else
-        cocktail_category = Category.find_by(id: cocktail.category_id).strCategory
-        render json: {strDrink: cocktail.strDrink, strInstructions: cocktail.strInstructions, strCategory: cocktail_category, strDrinkThumb: cocktail.strDrinkThumb, ingredients: cocktail.ingredients}
+        render json: {strDrink: cocktail.strDrink, strInstructions: cocktail.strInstructions, category_id: cocktail.category_id, strDrinkThumb: cocktail.strDrinkThumb, ingredients: cocktail.ingredients}
       end
     end
-
 
     def create
       parameters = cocktail_params
@@ -53,6 +51,12 @@ module Api
       else
         render error: { error: 'Unable to create Cocktail'}, status: 400
       end
+    end
+
+    def destroy
+      cocktail = Cocktail.find(params[:id])
+      cocktail.destroy
+      render json: {message: 'Cocktail deleted'}, status: :ok
     end
 
     private
