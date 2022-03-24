@@ -26,6 +26,20 @@ module Api
       end
     end
 
+    def update
+      category = Category.find(params[:id])
+      unless category.nil?
+        category.assign_attributes(category_params)
+        if category.save
+          render json: category, only: [:id, :strCategory], status: :ok
+        else
+          render error: { error: 'Unable to update Category'}, status: 400
+        end
+      else
+          render error: { error: 'Unable to update Category; Category doesnt exist'}, status: 400
+      end
+    end
+
     private
     def category_params
       params.require(:category).permit("strCategory")

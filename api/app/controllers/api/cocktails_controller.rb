@@ -22,7 +22,7 @@ module Api
     def show
       cocktail = Cocktail.find_by(id: params[:id])
       if cocktail.nil?
-        render json: {drinks: nil}
+        render error: { error: 'Cocktail doesnt exist'}, status: 400
       else
         cocktail_category = Category.find_by(id: cocktail.category_id).strCategory
         render json: {strDrink: cocktail.strDrink, strInstructions: cocktail.strInstructions, strCategory: cocktail_category, strDrinkThumb: cocktail.strDrinkThumb, ingredients: cocktail.ingredients}
@@ -49,9 +49,37 @@ module Api
         cocktail.ingredients.push(object_ingredient)
       end
       if(cocktail.save)
-        render json: cocktail, only: [:id, :strDrink, :strDrinkThumb, :category_id, :strInstructions], status: :created
+        render json: cocktail, only: [:id, :strDrink, :strDrinkThumb, :category_id, :strInstructions, :ingredients], status: :created
       else
         render error: { error: 'Unable to create Cocktail'}, status: 400
+      end
+    end
+
+    def update
+      parameters = cocktail_params
+      puts parameters
+      cocktail = Cocktail.find(params[:id])
+
+      if cocktail.nil? || Category.find(params[:id]).nil?
+        render error: { error: 'Unable to update Cocktail' }, status: 400
+      else
+        cocktail.assign_attributes(cocktail_params.except(:ingredients))
+        cocktail.ingredients = []
+
+        for ingredient in parameters["ingredients"]
+          object_ingredient = Ingredient.find_by("LOWER(strIngredient) = ?", "#{ingredient["strIngredient"].downcase}")
+
+          if object_ingredient.nil?
+            object_ingredient = Ingredient.create(strIngredient: ingredient["strIngredient"])
+          end
+
+          cocktail.ingredients.push(object_ingredient)
+        end
+        if cocktail.save
+          render json: cocktail, only: [:id, :strDrink, :strDrinkThumb, :category_id, :strInstructions, :ingredients], status: :ok
+        else
+          render error: { error: 'Unable to update Cocktail' }, status: 400
+        end
       end
     end
 
