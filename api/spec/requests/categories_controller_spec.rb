@@ -70,4 +70,20 @@ describe 'Categories API', type: :request do
 
     DatabaseCleaner.clean
   end
+
+  it 'deletes a category' do
+    DatabaseCleaner.clean
+
+    Category.create(strCategory: 'Juice')
+
+    first_count = Category.count
+    delete '/api/categories/1'
+    last_count = Category.count
+
+    expect(response).to have_http_status(:ok)
+    expect(first_count - last_count).to eq(1)
+    expect(response.body).to eq({ message: 'Category deleted' }.to_json)
+
+    DatabaseCleaner.clean
+  end
 end

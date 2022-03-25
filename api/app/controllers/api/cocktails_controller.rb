@@ -22,7 +22,7 @@ module Api
     end
 
     def show
-      cocktail = Cocktail.find_by(id: params[:id])
+      cocktail = Cocktail.find(params[:id])
       if cocktail.nil?
         render error: { error: 'Cocktail doesnt exist' }, status: 400
       else
@@ -58,12 +58,9 @@ module Api
 
     def update
       parameters = cocktail_params
-      puts parameters
       cocktail = Cocktail.find(params[:id])
 
-      if parameters.has_key? :category_id
-        cocktail = nil if Category.find(parameters[:category_id]).nil?
-      end
+      cocktail = nil if parameters.key?(:category_id) && Category.find(parameters[:category_id]).nil?
 
       if cocktail.nil?
         render error: { error: 'Unable to update Cocktail' }, status: 400
@@ -85,6 +82,12 @@ module Api
           render error: { error: 'Unable to update Cocktail' }, status: 400
         end
       end
+    end
+
+    def destroy
+      cocktail = Cocktail.find(params[:id])
+      cocktail.destroy
+      render json: { message: 'Cocktail deleted' }, status: :ok
     end
 
     private

@@ -5,7 +5,7 @@ require 'database_cleaner/active_record'
 
 DatabaseCleaner.strategy = :truncation
 
-describe 'API', type: :request do
+describe 'Ingredients API', type: :request do
   it 'returns all ingredients' do
     DatabaseCleaner.clean
 
@@ -126,7 +126,23 @@ describe 'API', type: :request do
     expect(response.body).to eq({ strDescription: 'descricao da laranja',
                                   strImageSource: 'teste_laranja_edit',
                                   id: 1,
-                                  strIngredient: 'Orange'}.to_json)
+                                  strIngredient: 'Orange' }.to_json)
+
+    DatabaseCleaner.clean
+  end
+
+  it 'deletes an ingredient' do
+    DatabaseCleaner.clean
+
+    Ingredient.create(strIngredient: 'Orange', strDescription: 'Its a Fruit!')
+
+    first_count = Ingredient.count
+    delete '/api/ingredients/1'
+    last_count = Ingredient.count
+
+    expect(response).to have_http_status(:ok)
+    expect(first_count - last_count).to eq(1)
+    expect(response.body).to eq({ message: 'Ingredient deleted' }.to_json)
 
     DatabaseCleaner.clean
   end

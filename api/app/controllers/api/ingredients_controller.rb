@@ -22,7 +22,7 @@ module Api
     def show
       ingredient = Ingredient.find_by(id: params[:id])
       if ingredient.nil?
-        render json: { ingredient: nil }
+        render error: { error: 'Ingredient does not exist' }, status: 400
       else
         render json: { strIngredient: ingredient.strIngredient, strDescription: ingredient.strDescription,
                        strImageSource: ingredient.strImageSource }
@@ -50,6 +50,12 @@ module Api
           render error: { error: 'Unable to update Ingredient' }, status: 400
         end
       end
+    end
+
+    def destroy
+      ingredient = Ingredient.find(params[:id])
+      ingredient.destroy
+      render json: { message: 'Ingredient deleted' }, status: :ok
     end
 
     private

@@ -13,7 +13,7 @@ module Api
     def show
       category = Category.find_by(id: params[:id])
       if category.nil?
-        render error: { error: 'Unable to create Category' }, status: 400
+        render error: { error: 'Category does not exist' }, status: 400
       else
         render json: category, only: %i[id strCategory]
       end
@@ -40,6 +40,12 @@ module Api
           render error: { error: 'Unable to update Category' }, status: 400
         end
       end
+    end
+
+    def destroy
+      category = Category.find(params[:id])
+      category.destroy
+      render json: { message: 'Category deleted' }, status: :ok
     end
 
     private
