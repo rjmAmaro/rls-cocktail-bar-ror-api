@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,35 +12,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_21_145056) do
-  create_table "categories", force: :cascade do |t|
-    t.string "strCategory", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+ActiveRecord::Schema[7.0].define(version: 20_220_321_145_056) do
+  create_table 'categories', force: :cascade do |t|
+    t.string 'strCategory', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  create_table "cocktails", force: :cascade do |t|
-    t.string "strDrink", null: false
-    t.string "strDrinkThumb"
-    t.integer "category_id", null: false
-    t.string "strInstructions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_cocktails_on_category_id"
+  create_table 'cocktails', force: :cascade do |t|
+    t.string 'strDrink', null: false
+    t.string 'strDrinkThumb'
+    t.integer 'category_id', null: false
+    t.string 'strInstructions'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['category_id'], name: 'index_cocktails_on_category_id'
   end
 
-  create_table "cocktails_ingredients", id: false, force: :cascade do |t|
-    t.integer "cocktail_id", null: false
-    t.integer "ingredient_id", null: false
+  create_table 'cocktails_ingredients', id: false, force: :cascade do |t|
+    t.integer 'cocktail_id', null: false
+    t.integer 'ingredient_id', null: false
   end
 
-  create_table "ingredients", force: :cascade do |t|
-    t.string "strIngredient", null: false
-    t.string "strDescription"
-    t.string "strImageSource"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table 'ingredients', force: :cascade do |t|
+    t.string 'strIngredient', null: false
+    t.string 'strDescription'
+    t.string 'strImageSource'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  add_foreign_key "cocktails", "categories"
+  add_foreign_key 'cocktails', 'categories'
 end
